@@ -1,3 +1,6 @@
- int main(int argc, char *argv[]) {
-  return 0;
-}
+#include "helloworld.hpp"
+#include <iostream>
+
+namespace perf {
+void hello() { std::cout << "Hello, World!" << std::endl; }
+} // namespace perf
