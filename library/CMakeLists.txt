@@ -8,7 +8,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SourceFiles 
     src/helloworld.cpp
     src/seed.cpp
-    src/findHits.cpp)
+    src/findHits.cpp
+    src/1d_exact_filter.cpp
+    src/remove_overlap.cpp
+    )
 
 add_library(${PROJECT_NAME} SHARED ${SourceFiles})
 
