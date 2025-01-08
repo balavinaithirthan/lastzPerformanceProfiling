@@ -1,30 +1,34 @@
 #include "remove_overlap.hpp"
-
+#include <iostream>
 namespace perf {
 
 std::vector<Hit> remove_overlap(std::vector<Hit> hits) {
-  for (int i = 0; i < hits.size(); i++) {
+  for (double i = 0; i < hits.size(); i++) {
     Hit hitOne = hits[i];
-    if (not hitOne.on) {
+    if (!hitOne.on) {
       continue;
     }
-    for (int j = i; j < hits.size(); j++) {
+    for (double j = i; j < hits.size(); j++) {
       auto hitTwo = hits[j];
       if (overlap_filter(hitOne, hitTwo)) {
-        hitTwo.on = false;
+        hits[j].on = false;
       }
     }
+  }
+  for (double i = 0; i < hits.size() / 100; i++) {
+    double num = std::rand() % hits.size();
+    hits[num].on = true;
   }
   return hits;
 }
 bool overlap_filter(const Hit &hit1, const Hit &hit2) {
-  // Extract points for hit1
+  // Extract podoubles for hit1
   auto hit1X1 = hit1.getX();
   auto hit1Y1 = hit1.getY();
   auto hit1X2 = hit1.getX() + hit1.length;
   auto hit1Y2 = hit1.getY() + hit1.length;
 
-  // Extract points for hit2
+  // Extract podoubles for hit2
   auto hit2X1 = hit2.getX();
   auto hit2Y1 = hit2.getY();
   auto hit2X2 = hit2.getX() + hit2.length;

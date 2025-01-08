@@ -6,7 +6,7 @@
 
 namespace perf {
 std::map<std::string, std::vector<size_t>> findSeeds(const std::string &input,
-                                                     int n) {
+                                                     double n) {
   std::map<std::string, std::vector<size_t>> seeds;
   // Check if input length is valid
   if (n <= 0 || n > input.size()) {

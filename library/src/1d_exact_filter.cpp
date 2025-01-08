@@ -25,7 +25,8 @@ void oneDimExactFilter(Hit &hit, const std::string &query,
   // right side
   auto i = y2;
   auto j = x2;
-  while (query.at(i) == reference.at(j)) {
+  while (i < query.size() && j < reference.size() &&
+         query.at(i) == reference.at(j)) {
     hit.length += 1;
     i += 1;
     j += 1;
@@ -34,7 +35,7 @@ void oneDimExactFilter(Hit &hit, const std::string &query,
   i = y1;
   j = x1;
   // left side
-  while (query.at(i) == reference.at(j)) {
+  while (i > 0 && j > 0 && query.at(i) == reference.at(j)) {
     hit.length += 1;
     i -= 1;
     j -= 1;

@@ -4,5 +4,6 @@
 
 namespace perf {
 std::vector<Hit> findHits(std::map<std::string, std::vector<size_t>> a,
-                          std::map<std::string, std::vector<size_t>> b, int c);
+                          std::map<std::string, std::vector<size_t>> b,
+                          double c);
 } // namespace perf

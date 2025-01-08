@@ -7,7 +7,7 @@
 
 namespace perf {
 std::map<std::string, std::vector<size_t>> findSeeds(const std::string &input,
-                                                     int n);
+                                                     double n);
 } // namespace perf
 
 #endif // SEED_HPP
