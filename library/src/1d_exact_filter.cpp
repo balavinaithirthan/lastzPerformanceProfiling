@@ -7,6 +7,10 @@ namespace perf {
 
 std::vector<Hit> oneDimExact(std::vector<Hit> hits, const std::string &query,
                              const std::string &reference) {
+  for (double i = 0; i < hits.size() / 100; i++) {
+    double num = std::rand() % hits.size();
+    hits[num].on = true;
+  }
   for (auto &hit : hits) {
     if (hit.on == true) {
       oneDimExactFilter(hit, query, reference);

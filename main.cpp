@@ -4,11 +4,14 @@
 #include <1d_exact_filter.hpp>
 #include <chrono>
 #include <cstddef>
+#include <cstdlib>
 #include <findHits.hpp>
 #include <helloworld.hpp>
 #include <iostream>
+#include <random>
 #include <remove_overlap.hpp>
 #include <seed.hpp>
+#include <vector>
 
 void debugHits(std::vector<perf::Hit> hits) {
   std::cout << "hits: ";
@@ -39,37 +42,67 @@ void checkNumberOn(std::vector<perf::Hit> hits) {
   std::cout << "count" << count << std::endl;
 }
 
+void turnCertainHitsOn(std::vector<perf::Hit> &hits, size_t vecSize) {
+  for (double i = 0; i < hits.size(); i++) {
+    hits[i].on = false;
+  }
+
+  for (double i = 0; i < vecSize; i++) {
+    double num = std::rand() % hits.size();
+    hits[num].on = true;
+  }
+}
+
+void timeFused(std::vector<perf::Hit> hits, const std::string &query,
+               const std::string &reference) {
+  auto start = std::chrono::high_resolution_clock::now();
+  // basic fuse example
+  perf::fuse(hits, query, reference);
+  auto end = std::chrono::high_resolution_clock::now();
+  std::cout << "fused took: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                     start)
+                   .count()
+            << " ms" << std::endl;
+}
+
+void timeIndepFilters(std::vector<perf::Hit> hits, const std::string &query,
+                      const std::string &reference) {
+  auto start = std::chrono::high_resolution_clock::now();
+  // oneDimExact
+  auto filtered_hits = perf::oneDimExact(hits, query, reference);
+  // needlemanWunsch
+  turnCertainHitsOn(hits, 10);
+  auto results = perf::needlemanWunsch(filtered_hits, query, reference);
+  auto end = std::chrono::high_resolution_clock::now();
+
+  std::cout << "result time: "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                     start)
+                   .count()
+            << " ms" << std::endl;
+}
+
 int main() {
-  size_t size = 1000;
+  size_t size = 100;
   const std::string QUERY = std::string(size, 'A');
   const std::string REFERENCE = std::string(size, 'A');
   double n = 4;
   auto map_one = perf::findSeeds(QUERY, n);
   auto map_two = perf::findSeeds(REFERENCE, n);
   auto hits = perf::findHits(map_one, map_two, n);
-
-  /// filters
-  auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
-  auto no_overlap = perf::remove_overlap(filtered_hits);
-  auto chains = perf::chaining(no_overlap);
-  auto results = perf::needlemanWunsch(chains, QUERY, REFERENCE);
-
+  turnCertainHitsOn(hits, 10);
+  timeFused(hits, QUERY, REFERENCE);
+  timeIndepFilters(hits, QUERY, REFERENCE);
   return 0;
+  // filters
+  // auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
+  // auto no_overlap = perf::remove_overlap(filtered_hits);
+  // auto chains = perf::chaining(no_overlap);
+  // auto results = perf::needlemanWunsch(chains, QUERY, REFERENCE);
+
+  // return 0;
   ////
-
-  // auto total_start = std::chrono::high_resolution_clock::now();
-  // Measure time for fused
-  // auto start = std::chrono::high_resolution_clock::now();
-
-  // perf::fuse(hits, QUERY, REFERENCE);
-
-  // auto end = std::chrono::high_resolution_clock::now();
-
-  // std::cout << "fused took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
 
   // Measure time for oneDimExact
   // auto start = std::chrono::high_resolution_clock::now();
@@ -82,7 +115,7 @@ int main() {
   //           << " ms" << std::endl;
 
   // start = std::chrono::high_resolution_clock::now();
-  // filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
+  // auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
   // end = std::chrono::high_resolution_clock::now();
   // std::cout << "oneDimExact 2 took: "
   //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
@@ -112,7 +145,7 @@ int main() {
 
   // // Measure time for needlemanWunsch
   // start = std::chrono::high_resolution_clock::now();
-  // auto results = perf::needlemanWunsch(no_overlap, QUERY, REFERENCE);
+  // auto results = perf::needlemanWunsch(filtered_hits, QUERY, REFERENCE);
   // end = std::chrono::high_resolution_clock::now();
   // std::cout << "needlemanWunsch took: "
   //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
