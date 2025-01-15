@@ -12,7 +12,8 @@ set(SourceFiles
     src/1d_exact_filter.cpp
     src/remove_overlap.cpp
     src/chaining.cpp
-    src/needleman.cpp 
+    src/needleman.cpp
+    src/fused.cpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SourceFiles})
