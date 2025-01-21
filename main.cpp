@@ -57,6 +57,7 @@ void timeFused(std::vector<perf::Hit> hits, const std::string &query,
                const std::string &reference) {
   auto start = std::chrono::high_resolution_clock::now();
   // basic fuse example
+  turnCertainHitsOn(hits, 10);
   perf::fuse(hits, query, reference);
   auto end = std::chrono::high_resolution_clock::now();
   std::cout << "fused took: "
@@ -84,14 +85,13 @@ void timeIndepFilters(std::vector<perf::Hit> hits, const std::string &query,
 }
 
 int main() {
-  size_t size = 100;
+  size_t size = 50;
   const std::string QUERY = std::string(size, 'A');
   const std::string REFERENCE = std::string(size, 'A');
   double n = 4;
   auto map_one = perf::findSeeds(QUERY, n);
   auto map_two = perf::findSeeds(REFERENCE, n);
   auto hits = perf::findHits(map_one, map_two, n);
-  turnCertainHitsOn(hits, 10);
   timeFused(hits, QUERY, REFERENCE);
   timeIndepFilters(hits, QUERY, REFERENCE);
   return 0;
