@@ -4,6 +4,7 @@
 #include <vector>
 
 namespace perf {
+
 class Hit {
 public:
   Hit() = default;

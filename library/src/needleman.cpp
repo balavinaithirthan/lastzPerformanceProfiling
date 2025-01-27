@@ -6,10 +6,9 @@ namespace perf {
 std::vector<Hit> needlemanWunsch(std::vector<Hit> hits,
                                  const std::string &query,
                                  const std::string &reference) {
-  double count = 0;
   for (auto &hit : hits) {
     if (hit.on == true) {
-      count += needlemanWunschFilter(hit, query, reference);
+      needlemanWunschFilter(hit, query, reference);
     }
   }
   return hits;
@@ -17,7 +16,6 @@ std::vector<Hit> needlemanWunsch(std::vector<Hit> hits,
 
 double needlemanWunschFilter(Hit &hit, const std::string &query,
                              const std::string &reference) {
-  // left side
   auto midpodoubleX = hit.getX() + hit.length / 2;
   auto midpodoubleY = hit.getY() + hit.length / 2;
   double count = 0;

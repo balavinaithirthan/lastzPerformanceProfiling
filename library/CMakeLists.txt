@@ -14,6 +14,7 @@ set(SourceFiles
     src/chaining.cpp
     src/needleman.cpp
     src/fused.cpp
+    src/gapped_extension.cpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SourceFiles})

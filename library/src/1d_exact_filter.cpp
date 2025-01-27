@@ -7,7 +7,6 @@ namespace perf {
 
 std::vector<Hit> oneDimExact(std::vector<Hit> hits, const std::string &query,
                              const std::string &reference) {
-#pragma omp parallel for
   for (auto &hit : hits) {
     if (hit.on == true) {
       oneDimExactFilter(hit, query, reference);
@@ -16,8 +15,11 @@ std::vector<Hit> oneDimExact(std::vector<Hit> hits, const std::string &query,
   return hits;
 }
 
+// TODO: how bad is this for loop compared to checking if true
+
 void oneDimExactFilter(Hit &hit, const std::string &query,
                        const std::string &reference) {
+
   auto x1 = hit.getX();
   auto y1 = hit.getY();
   auto x2 = hit.getX() + hit.length;

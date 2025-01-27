@@ -1,17 +1,4 @@
-#include "chaining.hpp"
-#include "fused.hpp"
-#include "needleman.hpp"
-#include <1d_exact_filter.hpp>
-#include <chrono>
-#include <cstddef>
-#include <cstdlib>
-#include <findHits.hpp>
-#include <helloworld.hpp>
-#include <iostream>
-#include <random>
-#include <remove_overlap.hpp>
-#include <seed.hpp>
-#include <vector>
+#include <library.hpp>
 
 void debugHits(std::vector<perf::Hit> hits) {
   std::cout << "hits: ";
@@ -84,85 +71,86 @@ void timeIndepFilters(std::vector<perf::Hit> hits, const std::string &query,
             << " ms" << std::endl;
 }
 
-int main() {
-  size_t size = 50;
-  const std::string QUERY = std::string(size, 'A');
-  const std::string REFERENCE = std::string(size, 'A');
-  double n = 4;
-  auto map_one = perf::findSeeds(QUERY, n);
-  auto map_two = perf::findSeeds(REFERENCE, n);
-  auto hits = perf::findHits(map_one, map_two, n);
-  timeFused(hits, QUERY, REFERENCE);
-  timeIndepFilters(hits, QUERY, REFERENCE);
-  return 0;
-  // filters
-  // auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
-  // auto no_overlap = perf::remove_overlap(filtered_hits);
-  // auto chains = perf::chaining(no_overlap);
-  // auto results = perf::needlemanWunsch(chains, QUERY, REFERENCE);
+// int main() {
+//   Not
+//   size_t size = 50;
+//   const std::string QUERY = std::string(size, 'A');
+//   const std::string REFERENCE = std::string(size, 'A');
+//   double n = 4;
+//   auto map_one = perf::findSeeds(QUERY, n);
+//   auto map_two = perf::findSeeds(REFERENCE, n);
+//   auto hits = perf::findHits(map_one, map_two, n);
+//   timeFused(hits, QUERY, REFERENCE);
+//   timeIndepFilters(hits, QUERY, REFERENCE);
+//   return 0;
+// filters
+// auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
+// auto no_overlap = perf::remove_overlap(filtered_hits);
+// auto chains = perf::chaining(no_overlap);
+// auto results = perf::needlemanWunsch(chains, QUERY, REFERENCE);
 
-  // return 0;
-  ////
+// return 0;
+////
 
-  // Measure time for oneDimExact
-  // auto start = std::chrono::high_resolution_clock::now();
-  // auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
-  // auto end = std::chrono::high_resolution_clock::now();
-  // std::cout << "oneDimExact took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
+// Measure time for oneDimExact
+// auto start = std::chrono::high_resolution_clock::now();
+// auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
+// auto end = std::chrono::high_resolution_clock::now();
+// std::cout << "oneDimExact took: "
+//           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+// start)
+//                  .count()
+//           << " ms" << std::endl;
 
-  // start = std::chrono::high_resolution_clock::now();
-  // auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
-  // end = std::chrono::high_resolution_clock::now();
-  // std::cout << "oneDimExact 2 took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
+// start = std::chrono::high_resolution_clock::now();
+// auto filtered_hits = perf::oneDimExact(hits, QUERY, REFERENCE);
+// end = std::chrono::high_resolution_clock::now();
+// std::cout << "oneDimExact 2 took: "
+//           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+// start)
+//                  .count()
+//           << " ms" << std::endl;
 
-  // // Measure time for remove_overlap
-  // start = std::chrono::high_resolution_clock::now();
-  // auto no_overlap = perf::remove_overlap(filtered_hits);
-  // end = std::chrono::high_resolution_clock::now();
-  // std::cout << "remove_overlap took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
+// // Measure time for remove_overlap
+// start = std::chrono::high_resolution_clock::now();
+// auto no_overlap = perf::remove_overlap(filtered_hits);
+// end = std::chrono::high_resolution_clock::now();
+// std::cout << "remove_overlap took: "
+//           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+// start)
+//                  .count()
+//           << " ms" << std::endl;
 
-  // // Measure time for chaining
-  // start = std::chrono::high_resolution_clock::now();
-  // auto chains = perf::chaining(no_overlap);
-  // end = std::chrono::high_resolution_clock::now();
-  // std::cout << "chaining took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
+// // Measure time for chaining
+// start = std::chrono::high_resolution_clock::now();
+// auto chains = perf::chaining(no_overlap);
+// end = std::chrono::high_resolution_clock::now();
+// std::cout << "chaining took: "
+//           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+// start)
+//                  .count()
+//           << " ms" << std::endl;
 
-  // // Measure time for needlemanWunsch
-  // start = std::chrono::high_resolution_clock::now();
-  // auto results = perf::needlemanWunsch(filtered_hits, QUERY, REFERENCE);
-  // end = std::chrono::high_resolution_clock::now();
-  // std::cout << "needlemanWunsch took: "
-  //           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
-  //                                                                    start)
-  //                  .count()
-  //           << " ms" << std::endl;
+// // Measure time for needlemanWunsch
+// start = std::chrono::high_resolution_clock::now();
+// auto results = perf::needlemanWunsch(filtered_hits, QUERY, REFERENCE);
+// end = std::chrono::high_resolution_clock::now();
+// std::cout << "needlemanWunsch took: "
+//           << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+// start)
+//                  .count()
+//           << " ms" << std::endl;
 
-  // // // Total time
-  // // auto total_end = std::chrono::high_resolution_clock::now();
-  // // std::cout << "Total time: "
-  // //           << std::chrono::duration_cast<std::chrono::milliseconds>(
-  // //                  total_end - total_start)
-  // //                  .count()
-  //           << " ms" << std::endl;
-  // // generate set of hits -nmer flag
-  // // one extension --xdrop flag, --hsp threshold
-  // // -- recoverseeds so you don't need to do diagonal hashing
-  // // chaining
-  // // gapped extension
-}
+// // // Total time
+// // auto total_end = std::chrono::high_resolution_clock::now();
+// // std::cout << "Total time: "
+// //           << std::chrono::duration_cast<std::chrono::milliseconds>(
+// //                  total_end - total_start)
+// //                  .count()
+//           << " ms" << std::endl;
+// // generate set of hits -nmer flag
+// // one extension --xdrop flag, --hsp threshold
+// // -- recoverseeds so you don't need to do diagonal hashing
+// // chaining
+//   // // gapped extension
+// }
